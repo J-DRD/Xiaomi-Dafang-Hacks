@@ -20,7 +20,7 @@ Afterwards, follow the steps from:
 
 USERNAME | PASSWORD
 --- | ---
-root | smart12 
+root | ismart12 
 
 - ( [https://ipcam:443/](https://ipcam:443/) )  or  ( [https:// [ IP_ADDRESS ] /](/#) )
 - ( [rtsp://ipcam:554/unicast](rtsp://ipcam:554/unicast) )  or  ( [rtsp:// [ IP_ADDRESS ] /unicast](/#) )
