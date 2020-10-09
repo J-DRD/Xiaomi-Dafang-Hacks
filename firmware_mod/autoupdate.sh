@@ -6,9 +6,9 @@
 # Depends on curl, jq (json parser), openssl (SHA calculation)
 
 # owner name and repo name
-REPO="EliasKotlyar/Xiaomi-Dafang-Hacks"
+REPO="J-DRD/Xiaomi-Dafang-Hacks"
 # Branch to use
-BRANCH="master"
+BRANCH="ns-cam-02"
 # Initial remote folder
 REMOTEFOLDER="firmware_mod"
 # Default destination foler
@@ -25,16 +25,16 @@ BASENAME="/system/sdcard/bin/busybox basename"
 FIND="/system/sdcard/bin/busybox find"
 VERSION_FILE='/system/sdcard/VERSION'
 COMMITS_FILE='/tmp/.lastcommit'
-
-
-
 TMPFILE=/tmp/update.tmp
+
 BACKUPEXT=.backup
-_PRINTONLY=0
-_V=0
+_BACKUP=0
+
 _FORCE=0
 _FORCEREBOOT=0
-_BACKUP=0
+
+_PRINTONLY=0
+_V=0
 
 _PROGRESS=0
 _NBFILES=0
