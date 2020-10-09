@@ -1,41 +1,36 @@
-## Xiaomi DaFang Hacks for Wyzecam V2 / Neos SmartCam (ns-cam-02)
+# Xiaomi DaFang Hacks for Wyzecam V2 / Neos SmartCam (NS-CAM-02)
 
-## Attention:
-  Do not install the latest firmware on your device,
-  it may cause unexpected issues when using this hack. 
-  
-This repository contains custom firmwares for the following devices:
+## [ Attention ]
+Do not install the latest firmware on your device, it may cause unexpected issues when using this hack.
+
+## [ Supported Devices ]
 
 Name | Picture
 --- | ---
-Wyzecam V2 | ![XiaoFang](/xiaofang.png)
-Neos SmartCam | ![XiaoFang](/xiaofang.png)
+Neos SmartCam / Wyzecam V2 | ![XiaoFang](/xiaofang.png)
 
+Before installation, consult the [FAQ](/hacks/faq.md) for additional advice.
 
-## How to install the CFW
-Before you try to install it, please read the [FAQ](/hacks/faq.md)
+Afterwards, follow the steps from:
+[CFW Installation](/hacks/install_cfw.md)
 
-After that, continue to the
-[Installation](/hacks/install_cfw.md)
+## [ Web-UI / RTSP Video Stream ]
 
+### Default Credentials:
 
-## Technical Information about the hack:
+USERNAME | PASSWORD
+--- | ---
+root | smart12 
 
-Start [here](/hacks/technical.md)
+- ( [https://ipcam:443/](https://ipcam:443/) )  or  ( [https:// [ IP_ADDRESS ] /](/#) )
+- ( [rtsp://ipcam:554/unicast](rtsp://ipcam:554/unicast) )  or  ( [rtsp:// [ IP_ADDRESS ] /unicast](/#) )
 
+## [ Integration for Home Automation ]
 
-## Integration in Home Automation Systems:
-
-[Domoticz](/integration/domoticz/domoticz.md)
-
-[Home Assistant](/integration/homeassistant/homeassistant.md)
-
-[HomeKit](/integration/homekit/homekit.md)
-
-[OpenHab](https://community.openhab.org/t/how-to-configure-a-hacked-xiaomi-dafang-to-work-with-openhab/51121)
-
-[Synology](/integration/synology/synology.md)
-
-[tinyCam](/integration/tinycam/tinycam.md)
-
-[Zoneminder](/integration/zoneminder/zoneminder.md)
+- [Domoticz](/integration/domoticz/domoticz.md)
+- [Home Assistant](/integration/homeassistant/homeassistant.md)
+- [HomeKit](/integration/homekit/homekit.md)
+- [OpenHab](https://community.openhab.org/t/how-to-configure-a-hacked-xiaomi-dafang-to-work-with-openhab/51121)
+- [Synology](/integration/synology/synology.md)
+- [tinyCam](/integration/tinycam/tinycam.md)
+- [Zoneminder](/integration/zoneminder/zoneminder.md)

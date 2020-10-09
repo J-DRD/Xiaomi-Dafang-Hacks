@@ -2,6 +2,5 @@
 
 Install following:
 ```
-apt-get install python-click
-apt-get install u-boot-tools
+sudo apt-get -y install python-click u-boot-tools
 ```

@@ -29,7 +29,7 @@ mkdir -p /system/sdcard/etc
 while IFS= read -r etc_element
 do
   if [ ! -f "/system/sdcard/etc/$etc_element" ] && [ ! -d "/system/sdcard/etc/$etc_element" ]; then
-    cp -fRL "/etc/$etc_element" /system/sdcard/etc
+	cp -fRL "/etc/$etc_element" /system/sdcard/etc
   fi
 done <<- END
 	TZ
@@ -67,10 +67,10 @@ fi
 ## Create a swap file on SD if desired
 if [ "$SWAP" = true ]; then
   if [ ! -f $SWAPPATH ]; then
-    echo "Creating ${SWAPSIZE}MB swap file on SD card"  >> $LOGPATH
-    dd if=/dev/zero of=$SWAPPATH bs=1M count=$SWAPSIZE
-    mkswap $SWAPPATH
-    echo "Swap file created in $SWAPPATH" >> $LOGPATH
+	echo "Creating ${SWAPSIZE}MB swap file on SD card"  >> $LOGPATH
+	dd if=/dev/zero of=$SWAPPATH bs=1M count=$SWAPSIZE
+	mkswap $SWAPPATH
+	echo "Swap file created in $SWAPPATH" >> $LOGPATH
   fi
   echo "Configuring swap file" >> $LOGPATH
   swapon -p 10 $SWAPPATH
@@ -79,10 +79,10 @@ fi
 
 # Create ZRAM swap as on the original firmware
 if [ ! "$SWAP_ZRAM" = false ]; then
-    echo 100 > /proc/sys/vm/swappiness
-    echo $SWAP_ZRAM_SIZE > /sys/block/zram0/disksize
-    mkswap /dev/zram0
-    swapon -p 20 /dev/zram0
+	echo 100 > /proc/sys/vm/swappiness
+	echo $SWAP_ZRAM_SIZE > /sys/block/zram0/disksize
+	mkswap /dev/zram0
+	swapon -p 20 /dev/zram0
 fi
 
 ## Create crontab dir and start crond:
@@ -92,10 +92,10 @@ if [ ! -d /system/sdcard/config/cron ]; then
   echo ${CONFIGPATH}/cron/crontabs/periodic
   # Wish busybox sh had brace expansion...
   mkdir -p ${CRONPERIODIC}/15min \
-           ${CRONPERIODIC}/hourly \
-           ${CRONPERIODIC}/daily \
-           ${CRONPERIODIC}/weekly \
-           ${CRONPERIODIC}/monthly
+		   ${CRONPERIODIC}/hourly \
+		   ${CRONPERIODIC}/daily \
+		   ${CRONPERIODIC}/weekly \
+		   ${CRONPERIODIC}/monthly
   cat > ${CONFIGPATH}/cron/crontabs/root <<EOF
 # min   hour    day     month   weekday command
 */15    *       *       *       *       busybox run-parts ${CRONPERIODIC}/15min
@@ -129,14 +129,14 @@ else
   fi
   MAC=$(grep MAC < /params/config/.product_config | cut -c16-27 | sed 's/\(..\)/\1:/g;s/:$//')
   if [ -f /driver/8189es.ko ]; then
-    # Its a DaFang
-    insmod /driver/8189es.ko rtw_initmac="$MAC"
+	# Its a DaFang
+	insmod /driver/8189es.ko rtw_initmac="$MAC"
   elif [ -f /driver/8189fs.ko ]; then
-    # Its a XiaoFang T20
-    insmod /driver/8189fs.ko rtw_initmac="$MAC"
+	# Its a XiaoFang T20
+	insmod /driver/8189fs.ko rtw_initmac="$MAC"
   else
-    # Its a Wyzecam V2
-    insmod /driver/rtl8189ftv.ko rtw_initmac="$MAC"
+	# Its a Wyzecam V2
+	insmod /driver/rtl8189ftv.ko rtw_initmac="$MAC"
   fi
   wpa_supplicant_status="$(wpa_supplicant -d -B -i wlan0 -c $CONFIGPATH/wpa_supplicant.conf -P /var/run/wpa_supplicant.pid)"
   echo "wpa_supplicant: $wpa_supplicant_status" >> $LOGPATH
@@ -148,7 +148,7 @@ fi
 if [ -f "$CONFIGPATH/staticip.conf" ]; then
   # Install a resolv.conf if present so DNS can work
   if [ -f "$CONFIGPATH/resolv.conf" ]; then
-    cp "$CONFIGPATH/resolv.conf" /etc/resolv.conf
+	cp "$CONFIGPATH/resolv.conf" /etc/resolv.conf
   fi
 
   # Configure staticip/netmask from config/staticip.conf
@@ -157,9 +157,9 @@ if [ -f "$CONFIGPATH/staticip.conf" ]; then
   ifconfig "$network_interface_name" up
   # Configure default gateway
   if [ -f "$CONFIGPATH/defaultgw.conf" ]; then
-    defaultgw=$(cat "$CONFIGPATH/defaultgw.conf" | grep -v "^$" | grep -v "^#")
-    route add default gw $defaultgw $network_interface_name
-    echo "Configured $defaultgw as default gateway" >> $LOGPATH
+	defaultgw=$(cat "$CONFIGPATH/defaultgw.conf" | grep -v "^$" | grep -v "^#")
+	route add default gw $defaultgw $network_interface_name
+	echo "Configured $defaultgw as default gateway" >> $LOGPATH
   fi
   echo "Configured $network_interface_name with static address $staticip_and_netmask" >> $LOGPATH
 else
@@ -168,17 +168,6 @@ else
   udhcpc_status=$(udhcpc -i "$network_interface_name" -p /var/run/udhcpc.pid -b -x hostname:"$(hostname)")
   echo "udhcpc: $udhcpc_status" >> $LOGPATH
 fi
-
-## Set Timezone
-set_timezone
-
-## Sync the time via NTP:
-if [ ! -f $CONFIGPATH/ntp_srv.conf ]; then
-  cp $CONFIGPATH/ntp_srv.conf.dist $CONFIGPATH/ntp_srv.conf
-fi
-ntp_srv="$(cat "$CONFIGPATH/ntp_srv.conf")"
-timeout 30 sh -c "until ping -c1 \"$ntp_srv\" &>/dev/null; do sleep 3; done";
-/system/sdcard/bin/busybox ntpd -p "$ntp_srv"
 
 ## Load audio driver module:
 insmod /system/sdcard/driver/audio.ko
@@ -199,9 +188,6 @@ ir_cut on
 yellow_led off
 blue_led off
 
-## Load motor driver module:
-insmod /driver/sample_motor.ko
-
 ## Determine the image sensor model:
 insmod /system/sdcard/driver/sinfo.ko
 echo 1 >/proc/jz/sinfo/info
@@ -214,11 +200,22 @@ if [ $sensor = 'jxf22' ]; then
   insmod /driver/sensor_jxf22.ko data_interface=2 pwdn_gpio=-1 reset_gpio=18 sensor_gpio_func=0
 else
   if [ ! -f /etc/sensor/jxf23.bin ]; then
-    cp /etc/sensor/jxf22.bin /etc/sensor/jxf23.bin
-    cp /etc/sensor/jxf22move.txt /etc/sensor/jxf23move.txt
+	cp /etc/sensor/jxf22.bin /etc/sensor/jxf23.bin
+	cp /etc/sensor/jxf22move.txt /etc/sensor/jxf23move.txt
   fi
   insmod /system/sdcard/driver/sensor_jxf23.ko data_interface=2 pwdn_gpio=-1 reset_gpio=18 sensor_gpio_func=0
 fi
+
+## Set Timezone
+set_timezone
+
+## Sync the time via NTP:
+if [ ! -f $CONFIGPATH/ntp_srv.conf ]; then
+  cp $CONFIGPATH/ntp_srv.conf.dist $CONFIGPATH/ntp_srv.conf
+fi
+ntp_srv="$(cat "$CONFIGPATH/ntp_srv.conf")"
+timeout 20 sh -c "until ping -c1 \"$ntp_srv\" &>/dev/null; do sleep 2; done";
+/system/sdcard/bin/busybox ntpd -p "$ntp_srv"
 
 ## Start SSH Server:
 ln -s /system/sdcard/bin/dropbearmulti /system/bin/scp
@@ -229,7 +226,7 @@ echo "dropbear: $dropbear_status" >> $LOGPATH
 ## Create a certificate for the webserver
 if [ ! -f $CONFIGPATH/lighttpd.pem ]; then
   export OPENSSL_CONF=$CONFIGPATH/openssl.cnf
-  /system/sdcard/bin/openssl req -new -x509 -keyout $CONFIGPATH/lighttpd.pem -out $CONFIGPATH/lighttpd.pem -days 365 -nodes -subj "/C=DE/ST=Bavaria/L=Munich/O=.../OU=.../CN=.../emailAddress=..."
+  /system/sdcard/bin/openssl req -new -x509 -keyout $CONFIGPATH/lighttpd.pem -out $CONFIGPATH/lighttpd.pem -days 365 -nodes -subj "/C=GB/ST=.../L=.../O=.../OU=.../CN=.../emailAddress=..."
   chmod 400 $CONFIGPATH/lighttpd.pem
   echo "Created new certificate for webserver" >> $LOGPATH
 fi
@@ -253,12 +250,12 @@ fi
 
 ## Configure OSD:
 if [ -f /system/sdcard/controlscripts/configureOsd ]; then
-    . /system/sdcard/controlscripts/configureOsd  2>/dev/null
+	. /system/sdcard/controlscripts/configureOsd  2>/dev/null
 fi
 
 ## Configure Motion:
 if [ -f /system/sdcard/controlscripts/configureMotion ]; then
-    . /system/sdcard/controlscripts/configureMotion  2>/dev/null
+	. /system/sdcard/controlscripts/configureMotion  2>/dev/null
 fi
 
 ## Autostart all enabled services:

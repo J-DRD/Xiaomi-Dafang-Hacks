@@ -11,7 +11,7 @@ import click
 @click.argument('rootfs', default="rootfs.bin", type=click.Path(exists=True))
 @click.argument('driver', default="driver.bin", type=click.Path(exists=True))
 @click.argument('appfs', default="appfs.bin", type=click.Path(exists=True))
-@click.argument('outfile', default="demo_5.5.1.177.bin")
+@click.argument('outfile', default="demo.bin")
 def cli(kernel, rootfs, driver, appfs, outfile):
     dic = [
         ("kernel", 0x200000, click.format_filename(kernel)),

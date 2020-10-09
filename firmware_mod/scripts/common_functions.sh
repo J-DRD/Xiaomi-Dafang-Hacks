@@ -6,12 +6,6 @@
 include () {
     [[ -f "$1" ]] && source "$1"
 }
-# Set motor range
-MAX_X=2600
-MAX_Y=700
-MIN_X=0
-MIN_Y=0
-STEP=100
 
 # Try to detect hardware model
 detect_model(){
@@ -22,8 +16,8 @@ detect_model(){
     # Its a XiaoFang T20
     echo "Xiaomi Xiaofang 1S"
   else
-    # Its a Wyzecam V2
-    echo "Wyzecam V2"
+    # Its a NEOS SmartCam / Wyzecam V2
+    echo "NEOS SmartCam / Wyzecam V2"
   fi
 }
 # Initialize  gpio pin
@@ -172,55 +166,6 @@ ir_cut(){
       ;;
     esac
   esac
-}
-
-# Calibrate and control the motor
-# use like: motor up 100
-motor(){
-  if [ -z "$2" ]
-  then
-    steps=$STEP
-  else
-    steps=$2
-  fi
-  case "$1" in
-  up)
-    /system/sdcard/bin/motor -d u -s "$steps"
-    update_motor_pos "$steps"
-    ;;
-  down)
-    /system/sdcard/bin/motor -d d -s "$steps"
-    update_motor_pos "$steps"
-    ;;
-  left)
-    /system/sdcard/bin/motor -d l -s "$steps"
-    update_motor_pos "$steps"
-    ;;
-  right)
-    /system/sdcard/bin/motor -d r -s "$steps"
-    update_motor_pos "$steps"
-    ;;
-  reset_pos_count)
-    /system/sdcard/bin/motor -d v -s "$steps"
-    update_motor_pos "$steps"
-    ;;
-  status)
-    if [ "$2" = "horizontal" ]; then
-        /system/sdcard/bin/motor -d u -s 0 | grep "x:" | awk  '{print $2}'
-    else
-        /system/sdcard/bin/motor -d u -s 0 | grep "y:" | awk  '{print $2}'
-    fi
-    ;;
-  esac
-
-}
-
-update_motor_pos(){
-  # Waiting for the motor to run.
-  SLEEP_NUM=$(awk -v a="$1" 'BEGIN{printf ("%f",a*1.3/1000)}')
-  sleep ${SLEEP_NUM//-/}
-  # Display AXIS to OSD
-  update_axis
 }
 
 # Read the hw light sensor (hw in mqtt.conf)
@@ -650,20 +595,6 @@ snapshot(){
     filename="/tmp/snapshot.jpg"
     /system/sdcard/bin/getimage > "$filename" &
     sleep 1
-}
-
-# Update axis
-update_axis(){
-  . /system/sdcard/config/osd.conf > /dev/null 2>/dev/null
-  AXIS=$(/system/sdcard/bin/motor -d s | sed '3d' | awk '{printf ("%s ",$0)}' | awk '{print " X="$2,"Y="$4}')
-
-  if [ "$ENABLE_OSD" = "true" ]; then
-    if [ "$DISPLAY_AXIS" = "true" ]; then
-      OSD="${OSD}${AXIS}"
-    fi
-
-    /system/sdcard/bin/setconf -k o -v "$OSD"
-  fi
 }
 
 # Set timezone from the timezone config file to system timezone

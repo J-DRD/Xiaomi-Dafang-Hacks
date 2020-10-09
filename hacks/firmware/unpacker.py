@@ -8,7 +8,7 @@ if not CHECK_FOLDER:
     os.makedirs("flash")
 
 @click.command()
-@click.argument('inputfile', default="demo_5.5.1.194.bin", type=click.Path(exists=True))
+@click.argument('inputfile', default="demo.bin", type=click.Path(exists=True))
 def cli(inputfile):
     dic = [
         ("kernel", 0x200000),
